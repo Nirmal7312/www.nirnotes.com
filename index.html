@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Note Taking Website</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #b3e0ff; /* Light blue background */
+    }
+    #container {
+      max-width: 600px;
+      margin: 20px auto;
+      background-color: #ffff00;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    #noteInput {
+      width: calc(100% - 40px);
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      resize: none;
+    }
+    #noteList {
+      list-style-type: none;
+      padding: 0;
+    }
+    .noteItem {
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+    .noteItem:last-child {
+      margin-bottom: 0;
+    }
+    .actionButton {
+      background-color: #4CAF50; /* Green button */
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+    #clearButton {
+      background-color: #ff4d4d; /* Red button */
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 10px 20px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <h1>NirNote</h1>
+    <textarea id="noteInput" placeholder="Write your note here..."></textarea>
+    <button class="actionButton" onclick="addNote()">Add Note</button>
+    <button id="clearButton" onclick="clearNotes()">Clear Notes</button>
+    <ul id="noteList"></ul>
+  </div>
+
+  <script>
+    // Load notes from localStorage when the page loads
+    window.onload = function() {
+      var savedNotes = JSON.parse(localStorage.getItem('notes')) || [];
+      var noteList = document.getElementById('noteList');
+      savedNotes.forEach(function(noteText) {
+        var li = document.createElement('li');
+        li.className = 'noteItem';
+        li.textContent = noteText;
+        noteList.appendChild(li);
+      });
+    };
+
+    function addNote() {
+      var noteInput = document.getElementById('noteInput');
+      var noteText = noteInput.value.trim();
+      if (noteText !== '') {
+        var noteList = document.getElementById('noteList');
+        var li = document.createElement('li');
+        li.className = 'noteItem';
+        li.textContent = noteText;
+        noteList.appendChild(li);
+        // Save note to localStorage
+        saveNoteToLocalStorage(noteText);
+        noteInput.value = '';
+      }
+    }
+
+    function saveNoteToLocalStorage(noteText) {
+      var savedNotes = JSON.parse(localStorage.getItem('notes')) || [];
+      savedNotes.push(noteText);
+      localStorage.setItem('notes', JSON.stringify(savedNotes));
+    }
+
+    function clearNotes() {
+      localStorage.removeItem('notes');
+      document.getElementById('noteList').innerHTML = '';
+    }
+  </script>
+</body>
+</html>
